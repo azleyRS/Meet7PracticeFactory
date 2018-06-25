@@ -1,6 +1,6 @@
 package com.fortests.meet7practicefactory;
 
-public enum ItemTypes {
+public enum ItemTypes implements BaseItem {
     ITEM1(1),
     ITEM2(2),
     ITEM3(3),

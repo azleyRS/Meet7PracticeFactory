@@ -20,6 +20,9 @@ class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public MyAdapter(ArrayList<ItemTypes> date) {
         mDate = date;
         mBinders = new ArrayList<>();
+        for (ItemTypes type: date) {
+            mBinders.add(generateBinder(type));
+        }
         initFactory();
     }
 
@@ -52,7 +55,10 @@ class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        
+        ViewHolderBinder binder = mBinders.get(position);
+        if (binder != null){
+            binder.bindViewHoder(holder);
+        }
     }
 
     @Override
@@ -116,4 +122,102 @@ class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             // textview here
         }
     }
+
+    //_________________
+
+    private ViewHolderBinder generateBinder(BaseItem item){
+        if (item.getType() == ItemTypes.ITEM1.type){
+            return new MyView1HolderBinder(item,ItemTypes.ITEM1.type);
+        } else if (item.getType() == ItemTypes.ITEM2.type){
+            return new MyView2HolderBinder(item,ItemTypes.ITEM2.type);
+        } else if (item.getType() == ItemTypes.ITEM3.type){
+            return new MyView3HolderBinder(item,ItemTypes.ITEM3.type);
+        }
+        return null;
+    }
+
+    public void setData(List<BaseItem> items){
+        mBinders.clear();
+        for (BaseItem item: items){
+            mBinders.add(generateBinder(item));
+        }
+        notifyDataSetChanged();
+    }
+
+    public abstract class ViewHolderBinder {
+        protected final int viewType;
+
+        public ViewHolderBinder(int viewType){
+            this.viewType = viewType;
+        }
+
+        public abstract void bindViewHoder(RecyclerView.ViewHolder holder);
+
+        public abstract BaseItem getItem();
+
+
+
+    }
+
+
+    public class MyView1HolderBinder extends ViewHolderBinder{
+
+        private final ItemTypes mItem;
+
+        public MyView1HolderBinder(BaseItem item, int viewType) {
+            super(viewType);
+            mItem = (ItemTypes) item;
+        }
+
+        @Override
+        public void bindViewHoder(RecyclerView.ViewHolder holder) {
+            MyAdapter.MyView1Holder myView1Holder = (MyAdapter.MyView1Holder) holder;
+            //here set id name etc
+        }
+
+        @Override
+        public BaseItem getItem() {
+            return mItem;
+        }
+    }
+    public class MyView2HolderBinder extends ViewHolderBinder{
+
+        private final ItemTypes mItem;
+
+        public MyView2HolderBinder(BaseItem item, int viewType) {
+            super(viewType);
+            mItem = (ItemTypes) item;
+        }
+
+        @Override
+        public void bindViewHoder(RecyclerView.ViewHolder holder) {
+            MyAdapter.MyView2Holder myView2Holder = (MyAdapter.MyView2Holder) holder;
+            //here set id name etc
+        }
+
+        @Override
+        public BaseItem getItem() {
+            return mItem;
+        }
+    }    public class MyView3HolderBinder extends ViewHolderBinder{
+
+        private final ItemTypes mItem;
+
+        public MyView3HolderBinder(BaseItem item, int viewType) {
+            super(viewType);
+            mItem = (ItemTypes) item;
+        }
+
+        @Override
+        public void bindViewHoder(RecyclerView.ViewHolder holder) {
+            MyAdapter.MyView3Holder myView1Holder = (MyAdapter.MyView3Holder) holder;
+            //here set id name etc
+        }
+
+        @Override
+        public BaseItem getItem() {
+            return mItem;
+        }
+    }
+
 }
